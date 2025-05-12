@@ -1,94 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>India Map with City Markers</title>
-  
-  <!-- Bootstrap CSS (from CDN) -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Form</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+    <style>
+        /* Using root variables for custom styles */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --input-background: #f8f9fa;
+            --button-color: #28a745;
+        }
 
-    #map {
-      height: 100%;
-      width: 100%;
-    }
+        /* Custom styles for form fields and button */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+        }
 
-    h2 {
-      text-align: center;
-      padding: 20px;
-      background-color: #f8f8f8;
-      margin: 0;
-    }
+        .container {
+            margin-top: 50px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Bootstrap Utility Class to make the map responsive */
-    .map-container {
-      height: 80vh; /* Make the map height responsive */
-    }
-  </style>
+        .additional-field {
+            display: none;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .btn-custom {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #218838;
+        }
+
+        .form-control {
+            background-color: var(--input-background);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 16px;
+            display: none;
+        }
+
+    </style>
 </head>
+
 <body>
 
-  <!-- Bootstrap Container for Responsive Layout -->
-  <h2>Major Cities in India</h2>
+    <div class="container">
+        <h2>Dropdown Form Example</h2>
 
-  <div class="container map-container">
-    <div id="map"></div>
-  </div>
+        <form action="/submit" method="POST">
+            <div class="mb-3">
+                <label for="option" class="form-label">Choose an option:</label>
+                <select id="option" name="option" class="form-select">
+                    <option value="textarea">Text area</option>
+                    <option value="textbox">Text box</option>
+                    <option value="image">Add image</option>
+                </select>
+            </div>
 
-  <!-- Google Maps API -->
-  <script>
-    function initMap() {
-      const map = new google.maps.Map(document.getElementById("map"), {
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-      });
-    
-      const locations = [
-     
-        { lat: 13.0827, lng: 80.2707, title: "Chennai" },
-        { lat: 12.9716, lng: 77.5946, title: "Bangalore" },
-      ];
-    
-      const infoWindow = new google.maps.InfoWindow();
-      const bounds = new google.maps.LatLngBounds(); // Create bounds to fit all markers
-    
-      locations.forEach(loc => {
-        const marker = new google.maps.Marker({
-          position: { lat: loc.lat, lng: loc.lng },
-          map,
-          title: loc.title,
+            <div class="mb-3">
+                <!-- Add button to show the selected field -->
+                <button type="button" onclick="showField()" class="btn btn-custom">Add</button>
+            </div>
+
+            <!-- Text area field -->
+            <div id="textarea" class="additional-field mb-3">
+                <label for="textarea-input" class="form-label">Enter text:</label>
+                <textarea id="textarea-input" name="textarea" rows="4" cols="50" class="form-control"></textarea>
+            </div>
+
+            <!-- Text box field -->
+            <div id="textbox" class="additional-field mb-3">
+                <label for="textbox-input" class="form-label">Enter text:</label>
+                <input type="text" id="textbox-input" name="textbox" class="form-control">
+            </div>
+
+            <!-- Image upload field (Camera only) -->
+            <div id="image" class="additional-field mb-3">
+                <label for="image-input" class="form-label">Upload an image (Camera only):</label>
+                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control">
+                <div id="error-message" class="error-message">Camera required. Please use a device with a camera.</div>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="Submit" class="btn btn-primary w-100">
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (Optional, for interactivity) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to show or hide fields based on dropdown selection
+        function showField() {
+            // Hide all fields
+            document.getElementById('textarea').style.display = 'none';
+            document.getElementById('textbox').style.display = 'none';
+            document.getElementById('image').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none'; // Hide error message initially
+
+            // Get the selected option
+            var selectedOption = document.getElementById('option').value;
+
+            // Show the relevant field
+            if (selectedOption === 'textarea') {
+                document.getElementById('textarea').style.display = 'block';
+            } else if (selectedOption === 'textbox') {
+                document.getElementById('textbox').style.display = 'block';
+            } else if (selectedOption === 'image') {
+                document.getElementById('image').style.display = 'block';
+                checkCameraAvailability();
+            }
+        }
+
+        // Function to check if the camera is available (for devices without cameras)
+        function checkCameraAvailability() {
+            const imageInput = document.getElementById('image-input');
+            const errorMessage = document.getElementById('error-message');
+
+            // Check if the input supports camera capture
+            if (!imageInput.capture) {
+                errorMessage.style.display = 'block'; // Show error if no camera support
+                imageInput.disabled = true; // Disable the file input if no camera is found
+            }
+        }
+
+        // Optional: Allow file selection for only camera-supported devices
+        document.getElementById("image-input").addEventListener("click", function (e) {
+            // Prevent file picker dialog if camera is supported and required
+            const imageInput = document.getElementById('image-input');
+            const errorMessage = document.getElementById('error-message');
+            if (imageInput.capture && !imageInput.disabled) {
+                // Allow camera capture only
+                e.preventDefault();
+                imageInput.click();
+            }
         });
-    
-        bounds.extend(marker.getPosition()); // Extend bounds for each marker
-    
-        marker.addListener("click", () => {
-          infoWindow.setContent(`<strong>${loc.title}</strong>`);
-          infoWindow.open(map, marker);
-        });
-      });
-    
-      map.fitBounds(bounds); // Adjust map view to fit all markers
-    }
-  </script>
-
-  <!-- Google Maps API Script with your key -->
-  <script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1Jk4E5wpj5lFWeI4lbLXWOA8EE8yT7cg&callback=initMap">
-  </script>
-
-  <!-- Bootstrap JS and dependencies (from CDN) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </script>
 
 </body>
+
 </html>
