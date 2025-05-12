@@ -70,7 +70,7 @@
     <div class="container">
         <h2 class="text-center text-primary mb-4">Camera Image Upload</h2>
 
-        <form action="/submit" method="POST">
+        <form id="image-upload-form">
             <!-- Image upload field (Camera only) -->
             <div class="mb-3">
                 <label for="image-input" class="form-label">Upload an image (Camera only):</label>
@@ -133,6 +133,40 @@
                 imagePreview.style.display = 'none';
             }
         }
+
+        document.getElementById("image-upload-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById("image-input");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select an image.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("image", file); // Replace "image" with your API's expected key if different
+
+            fetch("https://localhost:7276/api/trackall/AskTaskSummary/ask", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to upload");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Success:", data);
+                    alert("Image uploaded successfully!");
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Image upload failed. Check console for details.");
+                });
+        });
     </script>
 
 </body>
