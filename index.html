@@ -104,7 +104,8 @@
             <!-- Image upload field (Camera only) -->
             <div id="image" class="additional-field mb-3">
                 <label for="image-input" class="form-label">Upload an image (Camera only):</label>
-                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control">
+                <button type="button" id="open-camera" class="btn btn-primary" onclick="openCamera()">Open Camera</button>
+                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control" style="display:none;">
                 <div id="error-message" class="error-message">Camera required. Please use a device with a camera.</div>
             </div>
 
@@ -136,43 +137,30 @@
                 document.getElementById('textbox').style.display = 'block';
             } else if (selectedOption === 'image') {
                 document.getElementById('image').style.display = 'block';
-                checkCameraAvailability();
             }
         }
 
-        // Function to check if the camera is available (for devices without cameras)
-        function checkCameraAvailability() {
-            const imageInput = document.getElementById('image-input');
-            const errorMessage = document.getElementById('error-message');
+        // Function to open the camera when clicking the 'Open Camera' button
+        function openCamera() {
+            var imageInput = document.getElementById('image-input');
+            var errorMessage = document.getElementById('error-message');
 
-            // Check if the input supports camera capture
-            if (!imageInput.capture) {
-                errorMessage.style.display = 'block'; // Show error if no camera support
-                imageInput.disabled = true; // Disable the file input if no camera is found
+            // Check if device supports camera and trigger the camera interface
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        // Open camera
+                        imageInput.click(); // Trigger the file input to open the camera
+                    })
+                    .catch(function (err) {
+                        // If camera is not available or accessible, show error
+                        errorMessage.style.display = 'block';
+                    });
+            } else {
+                // If getUserMedia is not supported, show error message
+                errorMessage.style.display = 'block';
             }
         }
-
-        // Optional: Allow file selection for only camera-supported devices
-        document.getElementById("image-input").addEventListener("click", function (e) {
-            const imageInput = document.getElementById('image-input');
-            const errorMessage = document.getElementById('error-message');
-
-            // If the device has camera support (capture attribute is there)
-            if (imageInput.capture) {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(function (stream) {
-                            // Camera is available, proceed with file selection
-                            // The camera will open automatically here
-                        })
-                        .catch(function (err) {
-                            // If camera is not available, show error
-                            errorMessage.style.display = 'block';
-                        });
-                }
-            }
-        });
-
     </script>
 
 </body>
