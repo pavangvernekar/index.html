@@ -66,6 +66,11 @@
             display: none;
         }
 
+        .file-name {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 
@@ -105,8 +110,11 @@
             <div id="image" class="additional-field mb-3">
                 <label for="image-input" class="form-label">Upload an image (Camera only):</label>
                 <button type="button" id="open-camera" class="btn btn-primary" onclick="openCamera()">Open Camera</button>
-                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control" style="display:none;">
+                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control" style="display:none;" onchange="showFileName()">
                 <div id="error-message" class="error-message">Camera required. Please use a device with a camera.</div>
+
+                <!-- Display uploaded file name -->
+                <div id="file-name" class="file-name"></div>
             </div>
 
             <div class="mb-3">
@@ -160,6 +168,18 @@
                 // If getUserMedia is not supported, show error message
                 errorMessage.style.display = 'block';
             }
+        }
+
+        // Function to show the uploaded file name
+        function showFileName() {
+            var fileInput = document.getElementById('image-input');
+            var fileNameDisplay = document.getElementById('file-name');
+
+            // Get the name of the file uploaded
+            var fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
+
+            // Display the file name below the button
+            fileNameDisplay.textContent = 'Uploaded: ' + fileName;
         }
     </script>
 
