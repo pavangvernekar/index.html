@@ -147,7 +147,7 @@
 
             const formData = new FormData();
             formData.append("image", file); // Replace "image" with your API's expected key if different
-
+  alert(formData);
             fetch("https://localhost:7276/api/trackall/AskTaskSummary/ask", {
                 method: "POST",
                 body: formData
