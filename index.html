@@ -154,17 +154,16 @@
 
         // Optional: Allow file selection for only camera-supported devices
         document.getElementById("image-input").addEventListener("click", function (e) {
-            // Prevent file picker dialog if camera is supported and required
             const imageInput = document.getElementById('image-input');
             const errorMessage = document.getElementById('error-message');
-            if (imageInput.capture && !imageInput.disabled) {
-                // Allow camera capture only
+
+            // If the device has camera support (capture attribute is there)
+            if (imageInput.capture) {
                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    // Check if the camera is available
                     navigator.mediaDevices.getUserMedia({ video: true })
                         .then(function (stream) {
-                            // Camera is available, open camera input
-                            imageInput.click();
+                            // Camera is available, proceed with file selection
+                            // The camera will open automatically here
                         })
                         .catch(function (err) {
                             // If camera is not available, show error
@@ -173,6 +172,7 @@
                 }
             }
         });
+
     </script>
 
 </body>
