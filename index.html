@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Map with City Markers</title>
+  
+  <!-- Bootstrap CSS (from CDN) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f8f8;
+      margin: 0;
+    }
+
+    /* Bootstrap Utility Class to make the map responsive */
+    .map-container {
+      height: 80vh; /* Make the map height responsive */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Bootstrap Container for Responsive Layout -->
+  <h2>Major Cities in India</h2>
+
+  <div class="container map-container">
+    <div id="map"></div>
+  </div>
+
+  <!-- Google Maps API -->
+  <script>
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+      });
+    
+      const locations = [
+     
+        { lat: 13.0827, lng: 80.2707, title: "Chennai" },
+        { lat: 12.9716, lng: 77.5946, title: "Bangalore" },
+      ];
+    
+      const infoWindow = new google.maps.InfoWindow();
+      const bounds = new google.maps.LatLngBounds(); // Create bounds to fit all markers
+    
+      locations.forEach(loc => {
+        const marker = new google.maps.Marker({
+          position: { lat: loc.lat, lng: loc.lng },
+          map,
+          title: loc.title,
+        });
+    
+        bounds.extend(marker.getPosition()); // Extend bounds for each marker
+    
+        marker.addListener("click", () => {
+          infoWindow.setContent(`<strong>${loc.title}</strong>`);
+          infoWindow.open(map, marker);
+        });
+      });
+    
+      map.fitBounds(bounds); // Adjust map view to fit all markers
+    }
+  </script>
+
+  <!-- Google Maps API Script with your key -->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1Jk4E5wpj5lFWeI4lbLXWOA8EE8yT7cg&callback=initMap">
+  </script>
+
+  <!-- Bootstrap JS and dependencies (from CDN) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
