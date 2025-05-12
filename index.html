@@ -71,6 +71,13 @@
             font-weight: bold;
         }
 
+        .image-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            max-height: 300px;
+            display: none;
+        }
+
     </style>
 </head>
 
@@ -110,11 +117,14 @@
             <div id="image" class="additional-field mb-3">
                 <label for="image-input" class="form-label">Upload an image (Camera only):</label>
                 <button type="button" id="open-camera" class="btn btn-primary" onclick="openCamera()">Open Camera</button>
-                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control" style="display:none;" onchange="showFileName()">
+                <input type="file" id="image-input" name="image" accept="image/*" capture="camera" class="form-control" style="display:none;" onchange="showImagePreview()">
                 <div id="error-message" class="error-message">Camera required. Please use a device with a camera.</div>
+            </div>
 
-                <!-- Display uploaded file name -->
+            <!-- File name and image preview section -->
+            <div id="file-info" class="additional-field">
                 <div id="file-name" class="file-name"></div>
+                <img id="image-preview" class="image-preview" src="" alt="Image Preview">
             </div>
 
             <div class="mb-3">
@@ -133,6 +143,7 @@
             document.getElementById('textarea').style.display = 'none';
             document.getElementById('textbox').style.display = 'none';
             document.getElementById('image').style.display = 'none';
+            document.getElementById('file-info').style.display = 'none'; // Hide the file info section initially
             document.getElementById('error-message').style.display = 'none'; // Hide error message initially
 
             // Get the selected option
@@ -170,16 +181,34 @@
             }
         }
 
-        // Function to show the uploaded file name
-        function showFileName() {
+        // Function to show the uploaded file name and preview the image
+        function showImagePreview() {
             var fileInput = document.getElementById('image-input');
             var fileNameDisplay = document.getElementById('file-name');
+            var imagePreview = document.getElementById('image-preview');
+            var fileInfo = document.getElementById('file-info');
 
             // Get the name of the file uploaded
             var fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
 
-            // Display the file name below the button
+            // Display the file name
             fileNameDisplay.textContent = 'Uploaded: ' + fileName;
+
+            // If the user has selected a file, show the image preview
+            if (fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // Display the image
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+
+                // Show the file info section
+                fileInfo.style.display = 'block';
+            } else {
+                imagePreview.style.display = 'none'; // Hide the preview if no file is selected
+                fileInfo.style.display = 'none'; // Hide the file info section
+            }
         }
     </script>
 
